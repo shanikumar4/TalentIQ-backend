@@ -12,7 +12,16 @@ connectDB()
 
 const app = express()
 
-app.use(cors({ origin: process.env.CLIENT_URL || 'http://localhost:5173', credentials: true }))
+const allowedOrigins = [
+  'http://localhost:5173',
+  'https://talentiq-xvql.onrender.com'
+]
+if (process.env.CLIENT_URL) {
+  allowedOrigins.push(process.env.CLIENT_URL)
+  allowedOrigins.push(process.env.CLIENT_URL.replace(/\/$/, ''))
+}
+
+app.use(cors({ origin: allowedOrigins, credentials: true }))
 app.use(express.json())
 
 app.use('/api/auth', authRoutes)
